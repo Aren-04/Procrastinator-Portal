@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { 
   MoreVertical, Clock, Calendar as CalendarIcon, 
-  Trash2, FastForward, CheckCircle, Info, Sparkles
+  Trash2, FastForward, CheckCircle, Info, Sparkles, AlertTriangle
 } from 'lucide-react';
 import { 
   Dialog, DialogContent, DialogHeader, DialogTitle, 
