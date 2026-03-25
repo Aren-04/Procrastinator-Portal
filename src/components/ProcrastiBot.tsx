@@ -45,7 +45,7 @@ export function ProcrastiBot() {
         setMessages(prev => [...prev, { role: 'bot', text: result.comment }]);
       }
     } catch (e) {
-      // Silently fail if AI is unavailable or procrastinating
+      // Silently fail if AI is unavailable
     }
   };
 
@@ -86,31 +86,31 @@ export function ProcrastiBot() {
           <span className="sr-only">Open ProcrastiBot</span>
         </Button>
       ) : (
-        <Card className="w-[350px] h-[500px] border-none shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5">
+        <Card className="w-[350px] h-[500px] border border-white/10 shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 bg-zinc-950">
           <CardHeader className="bg-secondary text-secondary-foreground flex flex-row items-center justify-between p-4 space-y-0">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <CardTitle className="text-sm font-headline">ProcrastiBot</CardTitle>
-                <p className="text-[10px] opacity-80">Certified Failure Coach</p>
+                <CardTitle className="text-sm font-headline font-bold">ProcrastiBot</CardTitle>
+                <p className="text-[10px] opacity-80 uppercase tracking-widest font-black">Certified Failure Coach</p>
               </div>
             </div>
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8 text-white hover:bg-white/10">
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8 text-secondary-foreground hover:bg-black/10">
               <X className="w-4 h-4" />
             </Button>
           </CardHeader>
-          <CardContent className="flex-1 p-0 flex flex-col bg-slate-50">
+          <CardContent className="flex-1 p-0 flex flex-col bg-zinc-950">
             <ScrollArea className="flex-1 p-4" viewportRef={scrollRef}>
               <div className="space-y-4">
                 {messages.map((m, i) => (
                   <div key={i} className={cn("flex", m.role === 'user' ? "justify-end" : "justify-start")}>
                     <div className={cn(
-                      "max-w-[80%] p-3 rounded-2xl text-sm shadow-sm",
+                      "max-w-[85%] p-3 rounded-2xl text-sm shadow-md",
                       m.role === 'user' 
-                        ? "bg-secondary text-secondary-foreground rounded-tr-none" 
-                        : "bg-white border rounded-tl-none"
+                        ? "bg-secondary text-secondary-foreground rounded-tr-none font-medium" 
+                        : "bg-zinc-900 text-zinc-100 border border-white/5 rounded-tl-none"
                     )}>
                       {m.text}
                     </div>
@@ -118,19 +118,33 @@ export function ProcrastiBot() {
                 ))}
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div className="bg-white border p-3 rounded-2xl rounded-tl-none flex gap-1">
-                      <div className="w-2 h-2 bg-muted-foreground/30 rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-muted-foreground/30 rounded-full animate-bounce [animation-delay:0.2s]" />
-                      <div className="w-2 h-2 bg-muted-foreground/30 rounded-full animate-bounce [animation-delay:0.4s]" />
+                    <div className="bg-zinc-900 border border-white/5 p-3 rounded-2xl rounded-tl-none flex gap-1">
+                      <div className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce" />
+                      <div className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce [animation-delay:0.2s]" />
+                      <div className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce [animation-delay:0.4s]" />
                     </div>
                   </div>
                 )}
               </div>
             </ScrollArea>
-            <div className="p-3 bg-white border-t space-y-3">
+            <div className="p-3 bg-zinc-900/50 border-t border-white/10 space-y-3">
               <div className="flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" className="h-7 text-[10px] rounded-full" onClick={() => setInput("I really don't want to work today")}>Lazy Mode</Button>
-                <Button variant="outline" size="sm" className="h-7 text-[10px] rounded-full" onClick={() => setInput("I need an excuse for my manager")}>Excuse Me</Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-7 text-[10px] rounded-full bg-white/5 border-white/10 hover:bg-white/10 text-zinc-300 font-bold uppercase tracking-tighter" 
+                  onClick={() => setInput("I really don't want to work today")}
+                >
+                  Lazy Mode
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-7 text-[10px] rounded-full bg-white/5 border-white/10 hover:bg-white/10 text-zinc-300 font-bold uppercase tracking-tighter" 
+                  onClick={() => setInput("I need an excuse for my manager")}
+                >
+                  Excuse Me
+                </Button>
               </div>
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
@@ -138,12 +152,17 @@ export function ProcrastiBot() {
               >
                 <Input 
                   placeholder="Ask for distraction..." 
-                  className="rounded-full border-muted bg-slate-50"
+                  className="rounded-full border-white/10 bg-zinc-800 text-white placeholder:text-zinc-500 focus-visible:ring-secondary"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   disabled={isTyping}
                 />
-                <Button type="submit" size="icon" className="rounded-full bg-secondary shrink-0" disabled={isTyping}>
+                <Button 
+                  type="submit" 
+                  size="icon" 
+                  className="rounded-full bg-secondary text-secondary-foreground hover:opacity-90 shrink-0" 
+                  disabled={isTyping}
+                >
                   <Send className="w-4 h-4" />
                 </Button>
               </form>
