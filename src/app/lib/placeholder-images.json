@@ -1,0 +1,17 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-illustration",
+      "description": "A whimsical illustration of a person lounging on a cloud while tasks float by.",
+      "imageUrl": "https://picsum.photos/seed/procrastinate1/800/600",
+      "imageHint": "lazy relaxing"
+    },
+    {
+      "id": "task-manager-img",
+      "description": "A stack of papers turning into butterflies and flying away.",
+      "imageUrl": "https://picsum.photos/seed/procrastinate2/400/300",
+      "imageHint": "flying papers"
+    }
+  ]
+}
