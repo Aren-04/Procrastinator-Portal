@@ -1,6 +1,6 @@
-
 "use client";
 
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,7 @@ import {
   ArrowUpRight, Clock, Coffee, Sparkles, TrendingUp, AlertTriangle, 
   Gamepad2, Calendar as CalendarIcon, ChevronRight
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const inactivityData = [
   { name: 'Mon', value: 85 },
