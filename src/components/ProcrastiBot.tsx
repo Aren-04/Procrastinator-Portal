@@ -3,14 +3,13 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { ai } from '@/ai/genkit';
 import { procrastiBotContextualCommentary } from '@/ai/flows/procrasti-bot-contextual-commentary-flow';
 import { generateBadSuggestion } from '@/ai/flows/bad-suggestion-generator-flow';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
-import { MessageSquare, X, Send, Sparkles, Coffee, Ghost } from 'lucide-react';
+import { MessageSquare, X, Send, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type Message = {
@@ -42,9 +41,11 @@ export function ProcrastiBot() {
         action: 'page_load',
         context: { timestamp: new Date().toISOString() }
       });
-      setMessages(prev => [...prev, { role: 'bot', text: result.comment }]);
+      if (result && result.comment) {
+        setMessages(prev => [...prev, { role: 'bot', text: result.comment }]);
+      }
     } catch (e) {
-      console.error(e);
+      // Silently fail if AI is unavailable or procrastinating
     }
   };
 
@@ -56,27 +57,19 @@ export function ProcrastiBot() {
   }, [pathname]);
 
   const handleSendMessage = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || isTyping) return;
+    
     const userMsg = input;
     setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
     setInput("");
     setIsTyping(true);
 
     try {
-      // Logic for different triggers
-      if (userMsg.toLowerCase().includes("excuse")) {
-        // Just a mock response for now, flow would be called here
-        setTimeout(() => {
-          setMessages(prev => [...prev, { role: 'bot', text: "I'll write that email for you. Actually, I might just write it tomorrow." }]);
-          setIsTyping(false);
-        }, 1500);
-      } else {
-        const result = await generateBadSuggestion({ userMessage: userMsg });
-        setMessages(prev => [...prev, { role: 'bot', text: result.suggestion }]);
-        setIsTyping(false);
-      }
+      const result = await generateBadSuggestion({ userMessage: userMsg });
+      setMessages(prev => [...prev, { role: 'bot', text: result.suggestion }]);
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'bot', text: "My logic is currently procrastinating. Try again later?" }]);
+      setMessages(prev => [...prev, { role: 'bot', text: "My logic is currently procrastinating. Maybe try again... eventually?" }]);
+    } finally {
       setIsTyping(false);
     }
   };
@@ -136,21 +129,21 @@ export function ProcrastiBot() {
             </ScrollArea>
             <div className="p-3 bg-white border-t space-y-3">
               <div className="flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" className="h-7 text-[10px] rounded-full" onClick={() => setInput("I don't want to work")}>I don't want to work</Button>
-                <Button variant="outline" size="sm" className="h-7 text-[10px] rounded-full" onClick={() => setInput("Generate excuse")}>Generate excuse</Button>
-                <Button variant="outline" size="sm" className="h-7 text-[10px] rounded-full" onClick={() => setInput("Help me focus")}>Help me focus</Button>
+                <Button variant="outline" size="sm" className="h-7 text-[10px] rounded-full" onClick={() => setInput("I really don't want to work today")}>Lazy Mode</Button>
+                <Button variant="outline" size="sm" className="h-7 text-[10px] rounded-full" onClick={() => setInput("I need an excuse for my manager")}>Excuse Me</Button>
               </div>
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
                 className="flex gap-2"
               >
                 <Input 
-                  placeholder="Tell me what you're supposed to be doing..." 
+                  placeholder="Ask for distraction..." 
                   className="rounded-full border-muted bg-slate-50"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
+                  disabled={isTyping}
                 />
-                <Button type="submit" size="icon" className="rounded-full bg-secondary shrink-0">
+                <Button type="submit" size="icon" className="rounded-full bg-secondary shrink-0" disabled={isTyping}>
                   <Send className="w-4 h-4" />
                 </Button>
               </form>
