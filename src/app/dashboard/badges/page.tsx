@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -7,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge as UIBadge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { BookOpen, Sparkles, Filter, Lock, Unlock } from 'lucide-react';
+import { BookOpen, Sparkles, Filter, Lock, Unlock, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type BadgeType = {
